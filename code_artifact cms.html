@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATHS EXHIBITION 2026 IN POOVARASANKULAM M.V</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter & Tamil Support -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Math.js for parsing complex math expressions safely -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans Tamil', 'Inter', sans-serif;
+        }
+        canvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header / தலைப்புப் பகுதி -->
+    <header class="bg-slate-800 border-b border-slate-700 shadow-md py-4 px-6 flex flex-wrap justify-between items-center">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                <i class="fa-solid fa-chart-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight text-white">MATHS EXHIBITION 2026 IN POOVARASANKULAM M.V</h1>
+                <p class="text-xs text-slate-400">ஊடாடும் வரைபடக் கணிப்பான் (Interactive Graphing Calculator)</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 space-x-reverse mt-2 sm:mt-0">
+            <button onclick="resetView()" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm font-medium rounded-lg transition border border-slate-600 flex items-center space-x-1 space-x-reverse">
+                <i class="fa-solid fa-house-chimney text-xs"></i>
+                <span>ஆரம்ப நிலை</span>
+            </button>
+            <button onclick="clearAllEquations()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-sm font-medium rounded-lg transition border border-rose-500/30 flex items-center space-x-1 space-x-reverse">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+                <span>அனைத்தையும் நீக்குக</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container / முதன்மைப் பகுதி -->
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <!-- Sidebar / சமன்பாடுகள் மற்றும் கட்டுப்பாட்டுப் பகுதி -->
+        <aside class="w-full lg:w-96 bg-slate-800/80 backdrop-blur-md border-r border-slate-700 p-5 flex flex-col h-auto lg:h-[calc(100vh-73px)] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-semibold text-slate-200 flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-square-root-variable text-indigo-400"></i>
+                    <span>சமன்பாடுகள் (Equations)</span>
+                </h2>
+                <button onclick="addEquationRow()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition shadow-md flex items-center space-x-1 space-x-reverse">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>சேர்க்க</span>
+                </button>
+            </div>
+
+            <!-- Preloaded Examples / எடுத்துக்காட்டுகள் -->
+            <div class="mb-4 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
+                <p class="text-xs font-medium text-slate-400 mb-2">விரைவு எடுத்துக்காட்டுகள்:</p>
+                <div class="flex flex-wrap gap-1.5">
+                    <button onclick="loadExample('y = 2*x + 1', '#6366f1')" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 px-2.5 py-1 rounded-md border border-indigo-500/30 transition">y = 2x + 1</button>
+                    <button onclick="loadExample('y = x^2 - 4', '#ec4899')" class="text-xs bg-slate-800 hover:bg-slate-700 text-pink-300 px-2.5 py-1 rounded-md border border-pink-500/30 transition">y = x² - 4</button>
+                    <button onclick="loadExample('y = sin(x)', '#10b981')" class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-300 px-2.5 py-1 rounded-md border border-emerald-500/30 transition">y = sin(x)</button>
+                    <button onclick="loadExample('y = x^3 - 3*x', '#f59e0b')" class="text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-md border border-amber-500/30 transition">y = x³ - 3x</button>
+                </div>
+            </div>
+
+            <!-- Equations List / சமன்பாடுகளின் பட்டியல் -->
+            <div id="equations-container" class="space-y-3 flex-1 mb-4">
+                <!-- Dynamic rows will be inserted here -->
+            </div>
+
+            <!-- Help / குறிப்புகள் -->
+            <div class="mt-auto bg-slate-900/40 border border-slate-700/50 p-3 rounded-xl text-xs text-slate-400 space-y-1">
+                <p class="font-medium text-slate-300"><i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> உதவிக்குறிப்புகள்:</p>
+                <p>• பெருக்கலுக்கு <code class="text-indigo-300">*</code> அடையாளத்தைப் பயன்படுத்தவும் (எ.கா: <code class="text-indigo-300">2*x</code>).</p>
+                <p>• அடுக்கு குறிக்க <code class="text-indigo-300">^</code> பயன்படுத்தவும் (எ.கா: <code class="text-indigo-300">x^2</code>).</p>
+                <p>• மவுஸ் மூலம் இழுத்து வரைபடத்தை நகர்த்தலாம்; ஸ்க்ரோல் செய்து ஜூம் செய்யலாம்.</p>
+            </div>
+        </aside>
+
+        <!-- Canvas Area / வரைபட பகுதி -->
+        <section class="flex-1 relative bg-slate-950 flex flex-col h-[500px] lg:h-[calc(100vh-73px)] overflow-hidden">
+            
+            <!-- Floating Zoom Controls / பெரிதாக்கும் பொத்தான்கள் -->
+            <div class="absolute top-4 right-4 z-10 flex flex-col bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-xl shadow-xl overflow-hidden">
+                <button onclick="zoomIn()" title="பெரிதாக்குக" class="p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition border-b border-slate-700">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button onclick="zoomOut()" title="சிறிதாக்குக" class="p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+            </div>
+
+            <!-- Coordinate Tooltip / ஆயத்தொலைவு தகவல்காட்டி -->
+            <div id="tooltip" class="absolute bottom-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md border border-slate-700 px-3 py-1.5 rounded-lg text-xs font-mono text-slate-300 shadow-lg pointer-events-none hidden">
+                x: <span id="tooltip-x" class="text-indigo-400 font-bold">0.00</span>, y: <span id="tooltip-y" class="text-emerald-400 font-bold">0.00</span>
+            </div>
+
+            <!-- Main Canvas / கேன்வாஸ் வரைபடம் -->
+            <canvas id="graphCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+        </section>
+    </main>
+
+    <!-- Notification Modal Box -->
+    <div id="message-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl text-center">
+            <div id="modal-icon" class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="modal-title" class="text-lg font-bold text-white mb-1">கவனிக்கவும்</h3>
+            <p id="modal-message" class="text-sm text-slate-300 mb-5">செய்தி உரை இங்கு வரும்.</p>
+            <button onclick="closeModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition shadow-lg">சரி</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function showMessage(title, message, isError = true) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            const iconEl = document.getElementById('modal-icon');
+            if(isError) {
+                iconEl.className = "w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto mb-3 text-xl";
+                iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                iconEl.className = "w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3 text-xl";
+                iconEl.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
+            document.getElementById('message-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('message-modal').classList.add('hidden');
+        }
+
+        const canvas = document.getElementById('graphCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let scale = 40; 
+        let offsetX = 0; 
+        let offsetY = 0; 
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        let equations = [];
+        const defaultColors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#8b5cf6'];
+
+        window.onload = function() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            addEquationRowWithValues('y = 2*x + 1', defaultColors[0]);
+            addEquationRowWithValues('y = x^2 - 4', defaultColors[1]);
+
+            setupCanvasEvents();
+            drawGraph();
+        };
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            drawGraph();
+        }
+
+        function addEquationRow() {
+            const color = defaultColors[equations.length % defaultColors.length];
+            addEquationRowWithValues('y = x', color);
+        }
+
+        function addEquationRowWithValues(expr, color) {
+            const id = Date.now() + Math.random();
+            const container = document.getElementById('equations-container');
+            
+            const div = document.createElement('div');
+            div.className = "flex items-center space-x-2 space-x-reverse bg-slate-900/60 p-2.5 rounded-xl border border-slate-700/60 transition hover:border-slate-600";
+            div.dataset.id = id;
+
+            div.innerHTML = `
+                <input type="color" value="${color}" class="w-8 h-8 rounded-lg bg-transparent border-0 cursor-pointer color-picker" title="நிறத்தைத் தேர்ந்தெடுக்கவும்" oninput="updateEquations()">
+                <div class="flex-1 relative flex items-center">
+                    <span class="absolute right-3 text-slate-400 text-sm font-mono select-none">y =</span>
+                    <input type="text" value="${expr.startsWith('y =') ? expr.substring(3).trim() : expr}" placeholder="எ.கா: x^2 + 2*x" class="w-full bg-slate-800 border border-slate-700 rounded-lg pr-8 pl-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono eq-input" oninput="updateEquations()">
+                </div>
+                <button onclick="removeEquationRow('${id}')" class="text-slate-500 hover:text-rose-400 p-1.5 transition" title="நீக்குக">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            `;
+            container.appendChild(div);
+            updateEquations();
+        }
+
+        function removeEquationRow(id) {
+            const container = document.getElementById('equations-container');
+            const row = container.querySelector(`[data-id="${id}"]`);
+            if (row) {
+                container.removeChild(row);
+                updateEquations();
+            }
+        }
+
+        function clearAllEquations() {
+            document.getElementById('equations-container').innerHTML = '';
+            equations = [];
+            drawGraph();
+        }
+
+        function loadExample(fullExpr, color) {
+            addEquationRowWithValues(fullExpr, color);
+        }
+
+        function updateEquations() {
+            const rows = document.querySelectorAll('#equations-container > div');
+            equations = [];
+            
+            rows.forEach(row => {
+                const color = row.querySelector('.color-picker').value;
+                const rawExpr = row.querySelector('.eq-input').value.trim();
+                
+                if (rawExpr) {
+                    try {
+                        const compiled = math.compile(rawExpr);
+                        equations.push({
+                            expr: rawExpr,
+                            compiled: compiled,
+                            color: color,
+                            valid: true
+                        });
+                        row.querySelector('.eq-input').classList.remove('border-rose-500');
+                    } catch (err) {
+                        equations.push({
+                            valid: false
+                        });
+                        row.querySelector('.eq-input').classList.add('border-rose-500');
+                    }
+                }
+            });
+            drawGraph();
+        }
+
+        function drawGraph() {
+            if (!ctx) return;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.fillStyle = '#020617'; 
+            ctx.fillRect(0, 0, width, height);
+
+            const centerX = width / 2 + offsetX;
+            const centerY = height / 2 + offsetY;
+
+            drawGrid(width, height, centerX, centerY);
+            drawAxes(width, height, centerX, centerY);
+
+            equations.forEach(eq => {
+                if (eq.valid && eq.compiled) {
+                    plotFunction(eq.compiled, eq.color, width, height, centerX, centerY);
+                }
+            });
+        }
+
+        function drawGrid(width, height, centerX, centerY) {
+            ctx.lineWidth = 1;
+            let step = scale;
+            if (scale < 20) step *= 5;
+            else if (scale > 80) step /= 2;
+
+            ctx.strokeStyle = '#1e293b'; 
+            for (let x = centerX % step; x < width; x += step) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            for (let y = centerY % step; y < height; y += step) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawAxes(width, height, centerX, centerY) {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#475569'; 
+
+            if (centerX >= 0 && centerX <= width) {
+                ctx.beginPath();
+                ctx.moveTo(centerX, 0);
+                ctx.lineTo(centerX, height);
+                ctx.stroke();
+            }
+
+            if (centerY >= 0 && centerY <= height) {
+                ctx.beginPath();
+                ctx.moveTo(0, centerY);
+                ctx.lineTo(width, centerY);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            let step = scale;
+            if (scale < 20) step *= 5;
+            else if (scale > 80) step /= 2;
+
+            for (let x = centerX % step; x < width; x += step) {
+                const val = (x - centerX) / scale;
+                if (Math.abs(val) > 0.001) {
+                    ctx.fillText(val.toFixed(0), x, centerY + 6);
+                }
+            }
+
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (let y = centerY % step; y < height; y += step) {
+                const val = (centerY - y) / scale;
+                if (Math.abs(val) > 0.001) {
+                    ctx.fillText(val.toFixed(0), centerX - 8, y);
+                }
+            }
+        }
+
+        function plotFunction(compiled, color, width, height, centerX, centerY) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+
+            let first = true;
+            const precision = 2; 
+
+            for (let px = 0; px <= width; px += precision) {
+                const x = (px - centerX) / scale;
+                try {
+                    const y = compiled.evaluate({ x: x });
+                    if (typeof y === 'number' && !isNaN(y) && isFinite(y)) {
+                        const py = centerY - y * scale;
+                        
+                        if (py >= -height * 2 && py <= height * 3) {
+                            if (first) {
+                                ctx.moveTo(px, py);
+                                first = false;
+                            } else {
+                                ctx.lineTo(px, py);
+                            }
+                        } else {
+                            first = true;
+                        }
+                    } else {
+                        first = true;
+                    }
+                } catch (e) {
+                    first = true;
+                }
+            }
+            ctx.stroke();
+        }
+
+        function setupCanvasEvents() {
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - offsetX;
+                startY = e.clientY - offsetY;
+                canvas.classList.add('cursor-grabbing');
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                const centerX = canvas.width / 2 + offsetX;
+                const centerY = canvas.height / 2 + offsetY;
+                const graphX = (mouseX - centerX) / scale;
+                const graphY = (centerY - mouseY) / scale;
+
+                const tooltip = document.getElementById('tooltip');
+                if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
+                    tooltip.classList.remove('hidden');
+                    document.getElementById('tooltip-x').innerText = graphX.toFixed(2);
+                    document.getElementById('tooltip-y').innerText = graphY.toFixed(2);
+                } else {
+                    tooltip.classList.add('hidden');
+                }
+
+                if (!isDragging) return;
+                offsetX = e.clientX - startX;
+                offsetY = e.clientY - startY;
+                drawGraph();
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                canvas.classList.remove('cursor-grabbing');
+            });
+
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const zoomFactor = 1.1;
+                if (e.deltaY < 0) {
+                    scale *= zoomFactor;
+                } else {
+                    scale /= zoomFactor;
+                }
+                scale = Math.max(10, Math.min(500, scale));
+                drawGraph();
+            }, { passive: false });
+        }
+
+        function zoomIn() {
+            scale *= 1.25;
+            scale = Math.min(500, scale);
+            drawGraph();
+        }
+
+        function zoomOut() {
+            scale /= 1.25;
+            scale = Math.max(10, scale);
+            drawGraph();
+        }
+
+        function resetView() {
+            scale = 40;
+            offsetX = 0;
+            offsetY = 0;
+            drawGraph();
+        }
+    </script>
+</body>
+</html>
