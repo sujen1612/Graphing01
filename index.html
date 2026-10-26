@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATHS EXHIBITION - 2026 IN POOVARASANKULAM M.V</title>
+    <title>MATHS EXHIBITION 2026 IN POOVARASANKULAM M.V</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter & Tamil Support -->
+    <!-- Google Fonts - Noto Sans Tamil & Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Math.js for parsing complex math expressions safely -->
+    <!-- Math.js for math expressions -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
     <style>
         body {
@@ -21,25 +21,31 @@
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col overflow-x-hidden">
 
     <!-- Header / தலைப்புப் பகுதி -->
-    <header class="bg-slate-800 border-b border-slate-700 shadow-md py-4 px-6 flex flex-wrap justify-between items-center">
-        <div class="flex items-center space-x-3 space-x-reverse">
-            <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
-                <i class="fa-solid fa-chart-line text-xl"></i>
+    <header class="bg-slate-800 border-b border-slate-700 shadow-md py-3 px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="flex items-center space-x-3 space-x-reverse w-full sm:w-auto justify-between sm:justify-start">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 flex-shrink-0">
+                    <i class="fa-solid fa-chart-line text-lg sm:text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-lg font-bold tracking-tight text-white leading-tight">MATHS EXHIBITION 2026 IN POOVARASANKULAM M.V</h1>
+                    <p class="text-[11px] sm:text-xs text-slate-400">ஊடாடும் வரைபடக் கணிப்பான் (Interactive Graphing Calculator)</p>
+                </div>
             </div>
-            <div>
-                <h1 class="text-xl font-bold tracking-tight text-white">MATHS EXHIBITION 2026 IN POOVARASANKULAM M.V</h1>
-                <p class="text-xs text-slate-400">ஊடாடும் வரைபடக் கணிப்பான் (Interactive Graphing Calculator)</p>
-            </div>
+            <!-- Mobile Toggle Button for Sidebar -->
+            <button onclick="toggleMobileSidebar()" class="sm:hidden bg-slate-700 hover:bg-slate-600 p-2.5 rounded-xl text-slate-200 transition">
+                <i id="mobile-toggle-icon" class="fa-solid fa-sliders text-sm"></i>
+            </button>
         </div>
-        <div class="flex items-center space-x-2 space-x-reverse mt-2 sm:mt-0">
-            <button onclick="resetView()" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm font-medium rounded-lg transition border border-slate-600 flex items-center space-x-1 space-x-reverse">
+        <div class="hidden sm:flex items-center space-x-2 space-x-reverse">
+            <button onclick="resetView()" class="px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs sm:text-sm font-medium rounded-lg transition border border-slate-600 flex items-center space-x-1 space-x-reverse">
                 <i class="fa-solid fa-house-chimney text-xs"></i>
                 <span>ஆரம்ப நிலை</span>
             </button>
-            <button onclick="clearAllEquations()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-sm font-medium rounded-lg transition border border-rose-500/30 flex items-center space-x-1 space-x-reverse">
+            <button onclick="clearAllEquations()" class="px-3.5 py-2 bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-xs sm:text-sm font-medium rounded-lg transition border border-rose-500/30 flex items-center space-x-1 space-x-reverse">
                 <i class="fa-solid fa-trash-can text-xs"></i>
                 <span>அனைத்தையும் நீக்குக</span>
             </button>
@@ -47,24 +53,26 @@
     </header>
 
     <!-- Main Container / முதன்மைப் பகுதி -->
-    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <main class="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
         
         <!-- Sidebar / சமன்பாடுகள் மற்றும் கட்டுப்பாட்டுப் பகுதி -->
-        <aside class="w-full lg:w-96 bg-slate-800/80 backdrop-blur-md border-r border-slate-700 p-5 flex flex-col h-auto lg:h-[calc(100vh-73px)] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-base font-semibold text-slate-200 flex items-center space-x-2 space-x-reverse">
+        <aside id="sidebar" class="w-full lg:w-96 bg-slate-800/95 lg:bg-slate-800/80 backdrop-blur-md border-b lg:border-r border-slate-700 p-4 sm:p-5 flex flex-col transition-all duration-300 z-20 max-h-[50vh] lg:max-h-none overflow-y-auto">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-sm sm:text-base font-semibold text-slate-200 flex items-center space-x-2 space-x-reverse">
                     <i class="fa-solid fa-square-root-variable text-indigo-400"></i>
                     <span>சமன்பாடுகள் (Equations)</span>
                 </h2>
-                <button onclick="addEquationRow()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition shadow-md flex items-center space-x-1 space-x-reverse">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                    <span>சேர்க்க</span>
-                </button>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button onclick="addEquationRow()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition shadow-md flex items-center space-x-1 space-x-reverse">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>சேர்க்க</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Preloaded Examples / எடுத்துக்காட்டுகள் -->
-            <div class="mb-4 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
-                <p class="text-xs font-medium text-slate-400 mb-2">விரைவு எடுத்துக்காட்டுகள்:</p>
+            <div class="mb-3 bg-slate-900/60 p-2.5 sm:p-3 rounded-xl border border-slate-700/60">
+                <p class="text-[11px] sm:text-xs font-medium text-slate-400 mb-2">விரைவு எடுத்துக்காட்டுகள்:</p>
                 <div class="flex flex-wrap gap-1.5">
                     <button onclick="loadExample('y = 2*x + 1', '#6366f1')" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 px-2.5 py-1 rounded-md border border-indigo-500/30 transition">y = 2x + 1</button>
                     <button onclick="loadExample('y = x^2 - 4', '#ec4899')" class="text-xs bg-slate-800 hover:bg-slate-700 text-pink-300 px-2.5 py-1 rounded-md border border-pink-500/30 transition">y = x² - 4</button>
@@ -74,29 +82,38 @@
             </div>
 
             <!-- Equations List / சமன்பாடுகளின் பட்டியல் -->
-            <div id="equations-container" class="space-y-3 flex-1 mb-4">
+            <div id="equations-container" class="space-y-2.5 flex-1 mb-3">
                 <!-- Dynamic rows will be inserted here -->
             </div>
 
+            <!-- Mobile Quick Action Controls Bar -->
+            <div class="flex sm:hidden gap-2 pt-2 border-t border-slate-700/60 mb-2">
+                <button onclick="resetView()" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium rounded-lg transition text-center">
+                    <i class="fa-solid fa-house-chimney text-xs mr-1"></i> ஆரம்ப நிலை
+                </button>
+                <button onclick="clearAllEquations()" class="flex-1 py-2 bg-rose-600/20 text-rose-400 text-xs font-medium rounded-lg transition text-center border border-rose-500/30">
+                    <i class="fa-solid fa-trash-can text-xs mr-1"></i> அனைத்தையும் நீக்குக
+                </button>
+            </div>
+
             <!-- Help / குறிப்புகள் -->
-            <div class="mt-auto bg-slate-900/40 border border-slate-700/50 p-3 rounded-xl text-xs text-slate-400 space-y-1">
+            <div class="bg-slate-900/40 border border-slate-700/50 p-2.5 sm:p-3 rounded-xl text-[11px] sm:text-xs text-slate-400 space-y-1">
                 <p class="font-medium text-slate-300"><i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> உதவிக்குறிப்புகள்:</p>
                 <p>• பெருக்கலுக்கு <code class="text-indigo-300">*</code> அடையாளத்தைப் பயன்படுத்தவும் (எ.கா: <code class="text-indigo-300">2*x</code>).</p>
                 <p>• அடுக்கு குறிக்க <code class="text-indigo-300">^</code> பயன்படுத்தவும் (எ.கா: <code class="text-indigo-300">x^2</code>).</p>
-                <p>• மவுஸ் மூலம் இழுத்து வரைபடத்தை நகர்த்தலாம்; ஸ்க்ரோல் செய்து ஜூம் செய்யலாம்.</p>
             </div>
         </aside>
 
         <!-- Canvas Area / வரைபட பகுதி -->
-        <section class="flex-1 relative bg-slate-950 flex flex-col h-[500px] lg:h-[calc(100vh-73px)] overflow-hidden">
+        <section class="flex-1 relative bg-slate-950 flex flex-col h-[calc(100vh-140px)] sm:h-[calc(100vh-73px)] overflow-hidden">
             
-            <!-- Floating Zoom Controls / பெரிதாக்கும் பொத்தான்கள் -->
-            <div class="absolute top-4 right-4 z-10 flex flex-col bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-xl shadow-xl overflow-hidden">
-                <button onclick="zoomIn()" title="பெரிதாக்குக" class="p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition border-b border-slate-700">
-                    <i class="fa-solid fa-plus"></i>
+            <!-- Floating Zoom Controls & Mobile Sidebar Toggle -->
+            <div class="absolute top-4 right-4 z-10 flex flex-col bg-slate-900/85 backdrop-blur-md border border-slate-700 rounded-xl shadow-xl overflow-hidden">
+                <button onclick="zoomIn()" title="பெரிதாக்குக" class="p-2.5 sm:p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition border-b border-slate-700">
+                    <i class="fa-solid fa-plus text-xs sm:text-sm"></i>
                 </button>
-                <button onclick="zoomOut()" title="சிறிதாக்குக" class="p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition">
-                    <i class="fa-solid fa-minus"></i>
+                <button onclick="zoomOut()" title="சிறிதாக்குக" class="p-2.5 sm:p-3 hover:bg-slate-800 text-slate-300 hover:text-white transition">
+                    <i class="fa-solid fa-minus text-xs sm:text-sm"></i>
                 </button>
             </div>
 
@@ -142,6 +159,20 @@
             document.getElementById('message-modal').classList.add('hidden');
         }
 
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.getElementById('mobile-toggle-icon');
+            if (sidebar.classList.contains('max-h-[50vh]')) {
+                sidebar.classList.remove('max-h-[50vh]');
+                sidebar.classList.add('max-h-[15vh]');
+                icon.className = "fa-solid fa-sliders text-sm";
+            } else {
+                sidebar.classList.remove('max-h-[15vh]');
+                sidebar.classList.add('max-h-[50vh]');
+                icon.className = "fa-solid fa-xmark text-sm";
+            }
+        }
+
         const canvas = document.getElementById('graphCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -160,8 +191,8 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
             
-            addEquationRowWithValues('y = 2*x + 1', defaultColors[0]);
-            addEquationRowWithValues('y = x^2 - 4', defaultColors[1]);
+            addEquationRowWithValues('y = 2*x + 1', defaultColors[0], true);
+            addEquationRowWithValues('y = x^2 - 4', defaultColors[1], true);
 
             setupCanvasEvents();
             drawGraph();
@@ -176,22 +207,25 @@
 
         function addEquationRow() {
             const color = defaultColors[equations.length % defaultColors.length];
-            addEquationRowWithValues('y = x', color);
+            addEquationRowWithValues('y = x', color, true);
         }
 
-        function addEquationRowWithValues(expr, color) {
+        function addEquationRowWithValues(expr, color, visible = true) {
             const id = Date.now() + Math.random();
             const container = document.getElementById('equations-container');
             
             const div = document.createElement('div');
-            div.className = "flex items-center space-x-2 space-x-reverse bg-slate-900/60 p-2.5 rounded-xl border border-slate-700/60 transition hover:border-slate-600";
+            div.className = "flex items-center space-x-2 space-x-reverse bg-slate-900/60 p-2 sm:p-2.5 rounded-xl border border-slate-700/60 transition hover:border-slate-600";
             div.dataset.id = id;
 
             div.innerHTML = `
-                <input type="color" value="${color}" class="w-8 h-8 rounded-lg bg-transparent border-0 cursor-pointer color-picker" title="நிறத்தைத் தேர்ந்தெடுக்கவும்" oninput="updateEquations()">
+                <button onclick="toggleVisibility('${id}')" class="text-slate-400 hover:text-indigo-400 p-1 transition" title="காட்டு/மறை">
+                    <i class="fa-solid ${visible ? 'fa-eye' : 'fa-eye-slash text-slate-600'} text-xs sm:text-sm vis-icon"></i>
+                </button>
+                <input type="color" value="${color}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-transparent border-0 cursor-pointer color-picker" title="நிறத்தைத் தேர்ந்தெடுக்கவும்" oninput="updateEquations()">
                 <div class="flex-1 relative flex items-center">
-                    <span class="absolute right-3 text-slate-400 text-sm font-mono select-none">y =</span>
-                    <input type="text" value="${expr.startsWith('y =') ? expr.substring(3).trim() : expr}" placeholder="எ.கா: x^2 + 2*x" class="w-full bg-slate-800 border border-slate-700 rounded-lg pr-8 pl-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono eq-input" oninput="updateEquations()">
+                    <span class="absolute right-3 text-slate-400 text-xs sm:text-sm font-mono select-none">y =</span>
+                    <input type="text" value="${expr.startsWith('y =') ? expr.substring(3).trim() : expr}" placeholder="எ.கா: x^2 + 2*x" class="w-full bg-slate-800 border border-slate-700 rounded-lg pr-7 pl-3 py-1.5 text-xs sm:text-sm text-white focus:outline-none focus:border-indigo-500 font-mono eq-input" oninput="updateEquations()">
                 </div>
                 <button onclick="removeEquationRow('${id}')" class="text-slate-500 hover:text-rose-400 p-1.5 transition" title="நீக்குக">
                     <i class="fa-solid fa-xmark text-sm"></i>
@@ -199,6 +233,22 @@
             `;
             container.appendChild(div);
             updateEquations();
+        }
+
+        function toggleVisibility(id) {
+            const container = document.getElementById('equations-container');
+            const row = container.querySelector(`[data-id="${id}"]`);
+            if(row) {
+                const icon = row.querySelector('.vis-icon');
+                if(icon.classList.contains('fa-eye')) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash', 'text-slate-600');
+                } else {
+                    icon.classList.remove('fa-eye-slash', 'text-slate-600');
+                    icon.classList.add('fa-eye');
+                }
+                updateEquations();
+            }
         }
 
         function removeEquationRow(id) {
@@ -217,7 +267,7 @@
         }
 
         function loadExample(fullExpr, color) {
-            addEquationRowWithValues(fullExpr, color);
+            addEquationRowWithValues(fullExpr, color, true);
         }
 
         function updateEquations() {
@@ -227,6 +277,7 @@
             rows.forEach(row => {
                 const color = row.querySelector('.color-picker').value;
                 const rawExpr = row.querySelector('.eq-input').value.trim();
+                const isVisible = row.querySelector('.vis-icon').classList.contains('fa-eye');
                 
                 if (rawExpr) {
                     try {
@@ -235,6 +286,7 @@
                             expr: rawExpr,
                             compiled: compiled,
                             color: color,
+                            visible: isVisible,
                             valid: true
                         });
                         row.querySelector('.eq-input').classList.remove('border-rose-500');
@@ -265,7 +317,7 @@
             drawAxes(width, height, centerX, centerY);
 
             equations.forEach(eq => {
-                if (eq.valid && eq.compiled) {
+                if (eq.valid && eq.compiled && eq.visible) {
                     plotFunction(eq.compiled, eq.color, width, height, centerX, centerY);
                 }
             });
@@ -312,7 +364,7 @@
             }
 
             ctx.fillStyle = '#94a3b8';
-            ctx.font = '11px Inter, sans-serif';
+            ctx.font = '10px Inter, sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
 
@@ -323,7 +375,7 @@
             for (let x = centerX % step; x < width; x += step) {
                 const val = (x - centerX) / scale;
                 if (Math.abs(val) > 0.001) {
-                    ctx.fillText(val.toFixed(0), x, centerY + 6);
+                    ctx.fillText(val.toFixed(0), x, centerY + 5);
                 }
             }
 
@@ -332,7 +384,7 @@
             for (let y = centerY % step; y < height; y += step) {
                 const val = (centerY - y) / scale;
                 if (Math.abs(val) > 0.001) {
-                    ctx.fillText(val.toFixed(0), centerX - 8, y);
+                    ctx.fillText(val.toFixed(0), centerX - 6, y);
                 }
             }
         }
@@ -373,6 +425,7 @@
         }
 
         function setupCanvasEvents() {
+            // Mouse events
             canvas.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 startX = e.clientX - offsetX;
@@ -385,29 +438,33 @@
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
 
-                const centerX = canvas.width / 2 + offsetX;
-                const centerY = canvas.height / 2 + offsetY;
-                const graphX = (mouseX - centerX) / scale;
-                const graphY = (centerY - mouseY) / scale;
-
-                const tooltip = document.getElementById('tooltip');
-                if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
-                    tooltip.classList.remove('hidden');
-                    document.getElementById('tooltip-x').innerText = graphX.toFixed(2);
-                    document.getElementById('tooltip-y').innerText = graphY.toFixed(2);
-                } else {
-                    tooltip.classList.add('hidden');
-                }
-
-                if (!isDragging) return;
-                offsetX = e.clientX - startX;
-                offsetY = e.clientY - startY;
-                drawGraph();
+                handlePointerMove(mouseX, mouseY, e.clientX, e.clientY);
             });
 
             window.addEventListener('mouseup', () => {
                 isDragging = false;
                 canvas.classList.remove('cursor-grabbing');
+            });
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX - offsetX;
+                    startY = e.touches[0].clientY - offsetY;
+                }
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging) {
+                    offsetX = e.touches[0].clientX - startX;
+                    offsetY = e.touches[0].clientY - startY;
+                    drawGraph();
+                }
+            });
+
+            window.addEventListener('touchend', () => {
+                isDragging = false;
             });
 
             canvas.addEventListener('wheel', (e) => {
@@ -421,6 +478,28 @@
                 scale = Math.max(10, Math.min(500, scale));
                 drawGraph();
             }, { passive: false });
+        }
+
+        function handlePointerMove(mouseX, mouseY, clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const centerX = canvas.width / 2 + offsetX;
+            const centerY = canvas.height / 2 + offsetY;
+            const graphX = (mouseX - centerX) / scale;
+            const graphY = (centerY - mouseY) / scale;
+
+            const tooltip = document.getElementById('tooltip');
+            if (mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height) {
+                tooltip.classList.remove('hidden');
+                document.getElementById('tooltip-x').innerText = graphX.toFixed(2);
+                document.getElementById('tooltip-y').innerText = graphY.toFixed(2);
+            } else {
+                tooltip.classList.add('hidden');
+            }
+
+            if (!isDragging) return;
+            offsetX = clientX - startX;
+            offsetY = clientY - startY;
+            drawGraph();
         }
 
         function zoomIn() {
